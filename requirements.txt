@@ -1,0 +1,21 @@
+# Core dependencies for Qwen3-TTS Dashboard
+
+fastapi==0.133.1
+uvicorn[standard]==0.41.0
+pydantic==2.12.5
+starlette==1.0.1
+
+torch>=2.4.0
+torchaudio>=2.4.0
+transformers>=4.47.0
+tokenizers>=0.20.0
+safetensors>=0.4.0
+accelerate>=1.0.0
+einops>=0.8.0
+
+numpy>=1.26.0
+soundfile>=0.12.0
+python-multipart>=0.0.9
+
+# TTS backend (install separately if needed)
+# faster_qwen3_tts
