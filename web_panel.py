@@ -890,8 +890,15 @@ async def index():
 def main():
     global _model, _model_config
 
-    parser = argparse.ArgumentParser(description="Qwen3-TTS Web Dashboard")
-    parser.add_argument("--model", required=True, help="Model path or HuggingFace ID")
+    model_default = os.getenv("QWEN_MODEL_PATH", "")
+    if not model_default:
+        model_default = "/run/media/chapa/480gb/qwen3-local/Qwen3-TTS-12Hz-1.7B-CustomVoice-real"
+
+    parser = argparse.ArgumentParser(
+        description="Qwen3-TTS Web Dashboard",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument("--model", default=model_default, help="Model path or HuggingFace ID (default: QWEN_MODEL_PATH env or local model folder)")
     parser.add_argument("--host", default="0.0.0.0", help="Bind address")
     parser.add_argument("--port", type=int, default=8000, help="Port")
     parser.add_argument("--device", default="cuda", help="Device (cuda/cpu)")
@@ -910,6 +917,14 @@ def main():
 
     log.info("Loading model: %s", args.model)
     log.info("  device=%s  dtype=%s  attn=%s", args.device, args.dtype, args.attn)
+
+    # CPU-safe adjustments
+    if (args.device or "").strip().lower() == "cpu":
+        args.attn = "sdpa"
+        # avoid bf16 on many CPUs; use fp32
+        if args.dtype in ("bf16", "fp16"):
+            log.info("CPU mode detected: switching dtype to fp32 for safety")
+            args.dtype = "fp32"
 
     # Convert dtype string → torch.dtype
     if args.dtype == "bf16":

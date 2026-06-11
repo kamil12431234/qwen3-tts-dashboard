@@ -1,9 +1,9 @@
-# Core dependencies for Qwen3-TTS Dashboard
+# Qwen3-TTS Dashboard — core dependencies
 
-fastapi==0.133.1
-uvicorn[standard]==0.41.0
-pydantic==2.12.5
-starlette==1.0.1
+fastapi>=0.115
+uvicorn[standard]>=0.29
+pydantic>=2.7
+starlette>=0.41
 
 torch>=2.4.0
 torchaudio>=2.4.0
@@ -17,5 +17,8 @@ numpy>=1.26.0
 soundfile>=0.12.0
 python-multipart>=0.0.9
 
-# TTS backend (install separately if needed)
-# faster_qwen3_tts
+# TTS backend (required)
+faster-qwen3-tts>=0.2.5
+
+# Note: install torch with CUDA wheels if using GPU, e.g.:
+#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu124

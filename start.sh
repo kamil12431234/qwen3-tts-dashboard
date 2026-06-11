@@ -4,11 +4,10 @@ set -euo pipefail
 # ── Qwen3-TTS Web Panel — launch script ──────────────
 cd "$(dirname "$0")"
 
-# IMPORTANT: set your model path here or via env var QWEN_MODEL_PATH.
-# Examples:
-#   MODEL_PATH="Qwen/Qwen3-TTS-1.7B"             # public HF ID (if accessible)
-#   MODEL_PATH="/path/to/your/local/model/folder" # local directory
-MODEL_PATH="${QWEN_MODEL_PATH:-/home/chapa/.cache/huggingface/hub/models--Qwen--Qwen3-TTS-12Hz-1.7B-CustomVoice/snapshots/0c0e3051f131929182e2c023b9537f8b1c68adfe}"
+# Model path priority:
+# 1) QWEN_MODEL_PATH env var
+# 2) Local model folder on /run/media/chapa/480gb (default used by web_panel.py as well)
+MODEL_PATH="${QWEN_MODEL_PATH:-/run/media/chapa/480gb/qwen3-local/Qwen3-TTS-12Hz-1.7B-CustomVoice-real}"
 
 if [ -z "$MODEL_PATH" ]; then
     echo "ERROR: QWEN_MODEL_PATH is not set." >&2

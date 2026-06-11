@@ -1,37 +1,41 @@
-# Qwen3-TTS Dashboard
+# Qwen3-TTS Web Dashboard
 
-Web-интерфейс для синтеза речи на основе Qwen3-TTS (voice clone / custom speaker / voice design).
+FastAPI-based web dashboard for **Qwen3-TTS** (voice clone, custom voices, voice design) with a modern UI and simple REST API.
 
-## Быстрый старт
+## Quick start (local model on /run/media/chapa/480gb/)
 
-1. **Создать окружение:**
-   - `python -m venv venv`
-   - `source venv/bin/activate`
-   - `pip install -r requirements.txt`
-2. **Установить бэкенд TTS:**
-   - `pip install faster_qwen3_tts` (или из исходников)
-3. **Запустить панель:**
-   - `bash start.sh`
+1. Enter project directory:
+   - cd /run/media/chapa/480gb/qwen3-local/qwen3-local
 
-Открыть в браузере: http://localhost:8000
+2. Activate venv (or create it):
+   - source venv/bin/activate
+   - pip install -r requirements.txt
 
-## Настройка
+3. Run with local model:
+   - ./start.sh
+     or
+   - python web_panel.py --model /run/media/chapa/480gb/qwen3-local/Qwen3-TTS-12Hz-1.7B-CustomVoice-real
 
-Редактировать параметры в `start.sh`:
-- `MODEL_PATH` — путь к модели или ID на HuggingFace (по умолчанию Qwen/Qwen3-TTS-1.7B)
-- `PORT` — порт веб-интерфейса
-- `DEVICE`, `DTYPE`, `ATTN`
+4. Open in browser:
+   - http://localhost:8000
 
-## Режимы
+## Environment
 
-- **Voice Clone** — клонирование голоса по эталону (ref_audio + ref_text).
-- **Custom Voice** — выбор встроенного спикера.
-- **Voice Design** — генерация голоса по текстовому описанию (требует VoiceDesign-модель).
+- QWEN_MODEL_PATH (optional) — override model path:
+  - export QWEN_MODEL_PATH="/path/to/your/model"
 
-## API
+Defaults to the local model folder on /run/media/chapa/480gb if not set.
 
-- `GET /api/health` — статус сервиса.
-- `POST /api/generate` — синтез речи.
-- `GET /api/speakers` — список доступных спикеров.
-- `GET /api/outputs` — список сгенерированных файлов.
-- `GET /docs` — Swagger-документация.
+## API endpoints
+
+- GET /                 — Web dashboard UI
+- GET /api/health       — Model and runtime info
+- POST /api/generate    — Generate speech (form-encoded; see web_panel.py for fields)
+- GET /api/audio/{name} — Download generated audio file
+- GET /api/outputs      — List recent outputs
+
+## Notes
+
+- Uses faster-qwen3-tts as the backend.
+- Designed to run with CUDA (RTX 3070 Ti recommended); CPU mode supported but slow and limited.
+- Model weights are large (~3–4 GB) — keep them on a fast disk (e.g., /run/media/chapa/480gb).

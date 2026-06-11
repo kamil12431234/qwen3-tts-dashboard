@@ -1,7 +1,26 @@
+# Python / build artifacts
 __pycache__/
 *.py[cod]
 *.so
+*.egg-info/
+
+# Virtual environment
 venv/
+
+# Local/config (do not commit secrets)
 .env
-outputs/*.wav
+.env.*
+
+# Generated outputs and uploads
+outputs/
 web_files/
+
+# IDE / editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS junk
+.DS_Store
+Thumbs.db
