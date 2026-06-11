@@ -4,8 +4,17 @@ set -euo pipefail
 # ── Qwen3-TTS Web Panel — launch script ──────────────
 cd "$(dirname "$0")"
 
-# ── Config (edit here) ───────────────────────────────
-MODEL_PATH="${QWEN_MODEL_PATH:-Qwen/Qwen3-TTS-1.7B}"   # or local path, e.g. /path/to/model
+# IMPORTANT: set your model path here or via env var QWEN_MODEL_PATH.
+# Examples:
+#   MODEL_PATH="Qwen/Qwen3-TTS-1.7B"             # public HF ID (if accessible)
+#   MODEL_PATH="/path/to/your/local/model/folder" # local directory
+MODEL_PATH="${QWEN_MODEL_PATH:-}"
+
+if [ -z "$MODEL_PATH" ]; then
+    echo "ERROR: QWEN_MODEL_PATH is not set. Set it in this script or as an environment variable." >&2
+    exit 1
+fi
+
 HOST="0.0.0.0"
 PORT=8000
 DEVICE="cuda"

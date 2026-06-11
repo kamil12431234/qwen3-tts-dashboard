@@ -8,6 +8,7 @@ Launch:
 """
 
 import argparse
+import logging
 import base64
 import io
 import json
@@ -26,6 +27,14 @@ from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 
 
 app = FastAPI(title="Qwen3-TTS Dashboard", version="1.0.0")
+
+# Logging setup
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%H:%M:%S",
+)
+log = logging.getLogger("qwen3-tts")
 
 # ---------------------------------------------------------------------------
 # Global model handle (lazy-loaded on first request)
@@ -876,8 +885,8 @@ async def index():
 
 
 # ---------------------------------------------------------------------------
+
 # Entry point
-# ---------------------------------------------------------------------------
 def main():
     global _model, _model_config
 
@@ -922,7 +931,8 @@ def main():
         )
     except Exception as e:
         log.error("Failed to load model: %s", e)
-        sys.exit(1)
+        raise SystemExit(1)
+
     log.info("Model loaded. Sample rate: %d Hz", _model.sample_rate)
     log.info("Dashboard: http://%s:%d", args.host, args.port)
 
